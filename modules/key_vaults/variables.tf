@@ -103,7 +103,7 @@ variable net_sec_grp {
   default = {}
 }
 
-# variable storage_account_name {
-#   type    = map
-#   default = {}
-# }
+variable privatednszone_id {
+  type    = string
+}
+

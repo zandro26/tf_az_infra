@@ -87,3 +87,19 @@ locals {
   }
 }
 
+
+data "azurerm_private_dns_zone" "privatednszone" {
+  #name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
+  name                = "zschealthsocietyaesb.com"
+  resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+}
+
+data "azurerm_private_dns_a_record" "privatednsar" {
+  name                = "www"
+  zone_name           = data.azurerm_private_dns_zone.privatednszone.name
+  resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+  depends_on = [ 
+    data.azurerm_private_dns_zone.privatednszone
+   ]
+}
+
