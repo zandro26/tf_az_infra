@@ -1,4 +1,4 @@
-# Terraform Workspace for managinging enviornment level Azure Resources
+# Terraform Workspace for managinging enviornment level resources
 
 ## Workspace Variables
 

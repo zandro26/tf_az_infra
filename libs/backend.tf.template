@@ -1,0 +1,10 @@
+terraform {
+  backend "remote" {
+    hostname     = ""
+    organization = "TenzingLabs"
+
+    workspaces {
+      name="sx_cap_env"
+    }
+  }
+}
