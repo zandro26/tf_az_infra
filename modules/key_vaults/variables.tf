@@ -107,3 +107,10 @@ variable privatednszone_id {
   type    = string
 }
 
+variable az_client_config_object_id {
+  type    = string
+}
+
+# variable az_app_subnet_id {
+#   type    = string
+# }

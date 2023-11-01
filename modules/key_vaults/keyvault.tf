@@ -1,5 +1,6 @@
 
 
+# creating keyvault
 resource azurerm_key_vault keyvault {
     for_each = var.azure_domain
     name                       = each.value.keyvault.name
@@ -14,7 +15,7 @@ resource azurerm_key_vault keyvault {
 
   access_policy {
     tenant_id = each.value.keyvault.az_tenant_id 
-    object_id = data.azurerm_client_config.current.object_id
+    object_id = var.az_client_config_object_id
     secret_permissions = ["List"] #"list", "set", "delete"]
     key_permissions    = ["Get"] #, "create", "delete"]
     certificate_permissions = ["List"] #, "list", "delete"]
@@ -41,6 +42,7 @@ resource azurerm_key_vault keyvault {
     default_action   = "Allow"
     ip_rules         = each.value.keyvault.allowed_ip_ranges
     virtual_network_subnet_ids = [data.azurerm_subnet.appsnet[each.key].id]
+    #virtual_network_subnet_ids = [var.az_app_subnet_id]
   }
 depends_on = [ 
   azurerm_key_vault.keyvault

@@ -42,6 +42,7 @@ locals {
 
 
  }
+# subnet details from client team, should be with the same resource group
 data azurerm_subnet "appsnet" {
 for_each = var.azure_domain
    name= each.value.az_subnet.name
@@ -49,6 +50,7 @@ for_each = var.azure_domain
    resource_group_name=local.resource_group_name
    }
 
+# vnet details from client team, should be with the same resource group
 data azurerm_virtual_network "vnet" {
 for_each = var.azure_domain
    name = each.value.virtualnetwork.name
@@ -56,9 +58,7 @@ for_each = var.azure_domain
    }
 
 
-
-data "azurerm_client_config" "current" {}
-
+# nsg details from client team, should be with the same resource group
 data azurerm_network_security_group "appnsg" {
 for_each = var.azure_domain
    name= each.value.net_sec_grp.name

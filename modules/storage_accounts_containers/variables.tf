@@ -106,3 +106,8 @@ variable net_sec_grp {
 variable privatednszone_id {
   type    = string
 }
+
+
+variable az_client_config_object_id {
+  type    = string
+}

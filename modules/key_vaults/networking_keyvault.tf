@@ -7,6 +7,7 @@ resource "azurerm_private_endpoint" "private_endpoint2" {
   location                   = local.location
   resource_group_name        = local.resource_group_name
   subnet_id                  = data.azurerm_subnet.appsnet[each.key].id
+  #subnet_id                  = var.az_app_subnet_id
   private_service_connection {
     name                           = each.value.private_service_con.name
     private_connection_resource_id = azurerm_key_vault.keyvault[each.key].id

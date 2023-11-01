@@ -43,43 +43,20 @@ locals {
           }
         }
 
-        virtualnetwork = {
-          name                        = lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}")
+        virtualnetwork        = {
+            name              = lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}")
              }
-         az_subnet = {
-          name                        = lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-${var.zone_loc}-${var.env}")
-          }
-        
-          net_sec_grp = {
-          name                        = lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-nsg-${var.zone_loc}-${var.env}")
-          }
-        
-         public_ip = {
-          name                        = lower("${var.platform}-${var.context}-pip-${var.zone_loc}-${var.env}")
-          sku                         = "Standard"
-          allocation_method           = "Static"
-        }
-         az_lb = {
-          name                        = lower("${var.platform}-${var.context}-lbr-${var.zone_loc}-${var.env}")
-          sku                         = "Standard"
-         }
-          fe_ip_con = {
-           name                        = lower("fe_ip_con${var.env}sx")
-         }
-            privatelink = {
-              name                     = lower("${var.platform}-${var.context}-prvlnk-${var.zone_loc}-${var.env}")
-                          }
-          nat_ip = {
-            name                       = lower("${var.platform}-${var.context}-natip-${var.zone_loc}-${var.env}")
-            address_prefixes           =  ["10.0.1.0/24"]
+         az_subnet            = {
+             name             = lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-${var.zone_loc}-${var.env}")
+             }
+          net_sec_grp         = {
+              name            = lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-nsg-${var.zone_loc}-${var.env}")
               }
-          private_endpoint = {
-            name                       = lower("${var.platform}-${var.context}-prvendpt-${var.zone_loc}-${var.env}")
-            address_prefixes           =  ["10.0.1.0/24"]
+          private_endpoint    = {
+             name             = lower("${var.platform}-${var.context}-prvendpt-${var.zone_loc}-${var.env}")
               }
           private_service_con = {
-            name                        = lower("${var.platform}-${var.context}-prvendpt-srv-conn-${var.zone_loc}-${var.env}")
-  
+             name             = lower("${var.platform}-${var.context}-prvendpt-srv-conn-${var.zone_loc}-${var.env}")
               }
       }
     }
@@ -87,19 +64,35 @@ locals {
   }
 }
 
+# # subnet details from client team, should be with the same resource group
+# data azurerm_subnet "app_subnet" {
+# #for_each = var.azure_domain
+#    name= lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-${var.zone_loc}-${var.env}")
+#    #virtual_network_name = lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}")
+#    virtual_network_name = local.SB.az_domains.DATAHUB.virtualnetwork.name
+#    #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+#    resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
+# }
 
+# DNS zone information from client team, should be with the same resource group
 data "azurerm_private_dns_zone" "privatednszone" {
-  #name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
-  name                = "zschealthsocietyaesb.com"
-  resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+  name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
+  #name                = "zschealthsocietyaesb.com"
+  #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+  resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
 }
 
+# DNS A record information from client team, should be with the same resource group
 data "azurerm_private_dns_a_record" "privatednsar" {
   name                = "www"
   zone_name           = data.azurerm_private_dns_zone.privatednszone.name
-  resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+  #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+  resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
   depends_on = [ 
     data.azurerm_private_dns_zone.privatednszone
    ]
 }
+
+# client config i.e. terraform-azure-deployment SP
+data "azurerm_client_config" "current" {}
 

@@ -1,3 +1,4 @@
+# creating storage account
 resource azurerm_storage_account storage_account {
     for_each = var.azure_domain
     name                     = each.value.az_storage_accounts.name
