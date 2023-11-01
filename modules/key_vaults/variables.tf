@@ -18,11 +18,7 @@ variable zone_loc {
 }
 
 
-variable az_tenant_id {
-  type    = string
-}
-
-variable azure_domain {
+variable az_resource_block {
   type    = map
   default = {}
 }
@@ -114,3 +110,15 @@ variable az_client_config_object_id {
 # variable az_app_subnet_id {
 #   type    = string
 # }
+
+variable "user_group_map" {
+  type    = map(string)
+  default = {
+    "group1" = "sec-grp1",
+    "group2" = "sec-grp2",
+  }
+}
+
+variable "conns" {
+  type    = map
+}

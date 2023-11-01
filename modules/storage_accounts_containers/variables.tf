@@ -17,12 +17,7 @@ variable zone_loc {
   type    = string
 }
 
-
-variable az_tenant_id {
-  type    = string
-}
-
-variable azure_domain {
+variable az_resource_block {
   type    = map
   default = {}
 }

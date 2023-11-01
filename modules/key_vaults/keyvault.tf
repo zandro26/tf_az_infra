@@ -2,19 +2,23 @@
 
 # creating keyvault
 resource azurerm_key_vault keyvault {
-    for_each = var.azure_domain
-    name                       = each.value.keyvault.name
+    for_each = var.az_resource_block
+    #name                       = each.value.keyvault.name
+    #name                       = lower("${var.platform}${var.context}kv${var.zone_loc}${var.env}")
+    name                       = lower("${var.platform}${each.key}kv${var.zone_loc}${var.env}")
     location                   = local.location
     resource_group_name        = local.resource_group_name
-    tenant_id                  = each.value.keyvault.az_tenant_id 
+    #tenant_id                  = each.value.keyvault.az_tenant_id 
+    tenant_id                  = var.conns.az_tenant_id
     soft_delete_retention_days = 7
-    purge_protection_enabled    = false
+    purge_protection_enabled   = false
 
     sku_name = "standard"
 
 
   access_policy {
-    tenant_id = each.value.keyvault.az_tenant_id 
+    #tenant_id = each.value.keyvault.az_tenant_id 
+    tenant_id = var.conns.az_tenant_id
     object_id = var.az_client_config_object_id
     secret_permissions = ["List"] #"list", "set", "delete"]
     key_permissions    = ["Get"] #, "create", "delete"]

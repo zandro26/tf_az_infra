@@ -1,7 +1,7 @@
 
 # linking keyvault to PE
 resource "azurerm_private_endpoint" "private_endpoint2" {
-  for_each = var.azure_domain
+  for_each = var.az_resource_block
   name                       = "prvendpt-${azurerm_key_vault.keyvault[each.key].name}"
   #name                       = "prvendpt-${each.value.keyvault.name}"
   location                   = local.location

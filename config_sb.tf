@@ -7,15 +7,13 @@ locals {
     # az_pe_naming_convention = "pe[env][domain]"
  
 
-    az_domains = {
+    teams = {
       DATAHUB = {
         resourcegroup ={
           name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
           location = "Australia East"
         }
         keyvault = {
-          name                        = lower("${var.platform}${var.context}kv${var.zone_loc}${var.env}")
-          az_tenant_id                = var.conns.az_tenant_id
           rw                = ["sec-grp1", "sec-grp2"]
           ro                = ["sec-grp1", "sec-grp2"]
           allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
@@ -23,7 +21,6 @@ locals {
         }
         az_storage_accounts = { ##Ensure to use Gen2 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem
           # soft_delete_retention_days = 14 -- make it as default value for the module
-           name                     = lower("${var.platform}${var.context}s${var.zone_loc}${var.env}")
           datahub = {
             iam = {
               "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
@@ -66,12 +63,12 @@ locals {
 
 # # subnet details from client team, should be with the same resource group
 # data azurerm_subnet "app_subnet" {
-# #for_each = var.azure_domain
+# #for_each = var.az_resource_block
 #    name= lower("${var.platform}-${var.application}-${var.context}-prvapp-snet-${var.zone_loc}-${var.env}")
 #    #virtual_network_name = lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}")
-#    virtual_network_name = local.SB.az_domains.DATAHUB.virtualnetwork.name
+#    virtual_network_name = local.SB.teams.DATAHUB.virtualnetwork.name
 #    #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-#    resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
+#    resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
 # }
 
 # DNS zone information from client team, should be with the same resource group
@@ -79,7 +76,7 @@ data "azurerm_private_dns_zone" "privatednszone" {
   name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
   #name                = "zschealthsocietyaesb.com"
   #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-  resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
+  resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
 }
 
 # DNS A record information from client team, should be with the same resource group
@@ -87,7 +84,7 @@ data "azurerm_private_dns_a_record" "privatednsar" {
   name                = "www"
   zone_name           = data.azurerm_private_dns_zone.privatednszone.name
   #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-  resource_group_name = local.SB.az_domains.DATAHUB.resourcegroup.name
+  resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
   depends_on = [ 
     data.azurerm_private_dns_zone.privatednszone
    ]

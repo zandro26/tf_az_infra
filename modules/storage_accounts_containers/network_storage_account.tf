@@ -1,7 +1,7 @@
 
 # linking storage account to PE
 resource "azurerm_private_endpoint" "private_endpoint1" {
-  for_each = var.azure_domain
+  for_each = var.az_resource_block
   name                       = "prvendpt-${azurerm_storage_account.storage_account[each.key].name}"
   location                   = local.location
   resource_group_name        = local.resource_group_name
@@ -24,7 +24,7 @@ resource "azurerm_private_endpoint" "private_endpoint1" {
 }
 
 resource "azurerm_storage_account_network_rules" "storageaccount_network_rules" {
-  for_each = var.azure_domain
+  for_each = var.az_resource_block
   storage_account_id         = azurerm_storage_account.storage_account[each.key].id
   default_action             = "Allow"
   #ip_rules                   = [each.value.az_storage_accounts.datahub.allowed_ip_ranges[0],each.value.az_storage_accounts.datahub.allowed_ip_ranges[1]]
