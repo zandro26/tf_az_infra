@@ -4,8 +4,8 @@ resource "azurerm_private_endpoint" "private_endpoint2" {
   for_each = var.az_resource_block
   name                       = "prvendpt-${azurerm_key_vault.keyvault[each.key].name}"
   #name                       = "prvendpt-${each.value.keyvault.name}"
-  location                   = local.location
-  resource_group_name        = local.resource_group_name
+  location                   = var.az_locale
+  resource_group_name        = var.az_resource_group_name
   subnet_id                  = data.azurerm_subnet.appsnet[each.key].id
   #subnet_id                  = var.az_app_subnet_id
   private_service_connection {

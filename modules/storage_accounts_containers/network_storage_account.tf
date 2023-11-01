@@ -3,8 +3,8 @@
 resource "azurerm_private_endpoint" "private_endpoint1" {
   for_each = var.az_resource_block
   name                       = "prvendpt-${azurerm_storage_account.storage_account[each.key].name}"
-  location                   = local.location
-  resource_group_name        = local.resource_group_name
+  location                   = var.az_locale
+  resource_group_name        = var.az_resource_group_name
   subnet_id                  = data.azurerm_subnet.appsnet[each.key].id
   private_service_connection {
     name                           = each.value.private_service_con.name

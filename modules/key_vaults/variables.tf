@@ -23,9 +23,8 @@ variable az_resource_block {
   default = {}
 }
 
-variable resource_group_name {
-  type    = map
-  default = {}
+variable az_resource_group_name {
+  type    = string
 }
 
 variable datahub {
@@ -107,9 +106,9 @@ variable az_client_config_object_id {
   type    = string
 }
 
-# variable az_app_subnet_id {
-#   type    = string
-# }
+variable az_locale {
+  type    = string
+}
 
 variable "user_group_map" {
   type    = map(string)

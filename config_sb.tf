@@ -9,10 +9,10 @@ locals {
 
     teams = {
       DATAHUB = {
-        resourcegroup ={
-          name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-          location = "Australia East"
-        }
+        # resourcegroup ={
+        #   name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+        #   location = "Australia East"
+        # }
         keyvault = {
           rw                = ["sec-grp1", "sec-grp2"]
           ro                = ["sec-grp1", "sec-grp2"]
@@ -71,12 +71,17 @@ locals {
 #    resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
 # }
 
+# Resource group details
+data "azurerm_resource_group" "resourcegroup" {
+  name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
+}
 # DNS zone information from client team, should be with the same resource group
 data "azurerm_private_dns_zone" "privatednszone" {
   name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
   #name                = "zschealthsocietyaesb.com"
   #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-  resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
+  #resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
+  resource_group_name = data.azurerm_resource_group.resourcegroup.name
 }
 
 # DNS A record information from client team, should be with the same resource group
@@ -84,7 +89,7 @@ data "azurerm_private_dns_a_record" "privatednsar" {
   name                = "www"
   zone_name           = data.azurerm_private_dns_zone.privatednszone.name
   #resource_group_name = lower("${var.platform}-${var.application}-${var.context}-rg-${var.zone_loc}-${var.env}")
-  resource_group_name = local.SB.teams.DATAHUB.resourcegroup.name
+  resource_group_name = data.azurerm_resource_group.resourcegroup.name
   depends_on = [ 
     data.azurerm_private_dns_zone.privatednszone
    ]

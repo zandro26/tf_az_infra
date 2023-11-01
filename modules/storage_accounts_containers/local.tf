@@ -1,6 +1,4 @@
 locals { 
-    resource_group_name      = var.az_resource_block.DATAHUB.resourcegroup.name
-    location                 = var.az_resource_block.DATAHUB.resourcegroup.location
 
     containers = flatten(
         [for rg, rv in var.az_resource_block : 
@@ -47,14 +45,14 @@ data azurerm_subnet "appsnet" {
 for_each = var.az_resource_block
    name= each.value.az_subnet.name
    virtual_network_name = each.value.virtualnetwork.name
-   resource_group_name=local.resource_group_name
+   resource_group_name=var.az_resource_group_name
    }
 
 # vnet details from client team, should be with the same resource group
 data azurerm_virtual_network "vnet" {
 for_each = var.az_resource_block
    name = each.value.virtualnetwork.name
-   resource_group_name=local.resource_group_name
+   resource_group_name=var.az_resource_group_name
    }
 
 
@@ -62,6 +60,6 @@ for_each = var.az_resource_block
 data azurerm_network_security_group "appnsg" {
 for_each = var.az_resource_block
    name= each.value.net_sec_grp.name
-   resource_group_name=local.resource_group_name
+   resource_group_name=var.az_resource_group_name
    }
 

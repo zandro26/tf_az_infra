@@ -27,4 +27,6 @@ variable "az_client_secret" {
   sensitive = true
 }
 
-
+variable "az_zone_locale" {
+  type    = string
+}

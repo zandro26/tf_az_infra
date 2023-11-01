@@ -6,8 +6,8 @@ resource azurerm_key_vault keyvault {
     #name                       = each.value.keyvault.name
     #name                       = lower("${var.platform}${var.context}kv${var.zone_loc}${var.env}")
     name                       = lower("${var.platform}${each.key}kv${var.zone_loc}${var.env}")
-    location                   = local.location
-    resource_group_name        = local.resource_group_name
+    location                   = var.az_locale
+    resource_group_name        = var.az_resource_group_name
     #tenant_id                  = each.value.keyvault.az_tenant_id 
     tenant_id                  = var.conns.az_tenant_id
     soft_delete_retention_days = 7
