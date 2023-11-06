@@ -27,75 +27,8 @@ variable az_resource_group_name {
   type    = string
 }
 
-variable datahub {
-  type    = map
-  default = {}
-}
-
-variable keyvault {
-  type    = map
-  default = {}
-}
-
-
-variable azurerm_storage_account {
-  #type    = map
-    type = map(object({
-    name = string
-    # Other attributes
-  }))
-  default = {}
-}
-
-
-variable az_storage_accounts {
-  type    = map
-  default = {}
-}
-
-variable containers {
-  type    = map
-  default = {}
-}
-
-variable container_access_type {
-  type    = map
-  default = {}
-}
-
-variable azurerm_virtual_network {
-  type    = map
-  default = {}
-}
-
-variable azurerm_subnet {
-  type    = map
-  default = {}
-}
-
-variable azurerm_network_security_group {
-  type    = map
-  default = {}
-}
-
-variable azurerm_private_endpoint {
-  type    = map
-  default = {}
-}
-
-variable azurerm_storage_container {
-  type    = map
-  default = {}
-}
-
-variable az_subnet {
-  type    = map
-  default = {}
-}
-
-variable net_sec_grp {
-  type    = map
-  default = {}
+variable az_subnet_id {
+    type = string
 }
 
 variable privatednszone_id {
@@ -110,14 +43,75 @@ variable az_locale {
   type    = string
 }
 
-variable "user_group_map" {
-  type    = map(string)
-  default = {
-    "group1" = "sec-grp1",
-    "group2" = "sec-grp2",
-  }
-}
-
 variable "conns" {
   type    = map
 }
+
+variable "keyvault_rbac" {
+  type = list
+  default = [{ rbac_name = "rw", groupname = "sec-grp1" },  {rbac_name = "rw", groupname = "sec-grp2" }, {rbac_name = "ro", groupname = "sec-grp1" }, {rbac_name = "ro", groupname = "sec-grp2" }]
+ }
+
+variable keyvault_rw_secret_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+    "Set",
+    "Delete",
+    "Backup",
+    "Restore",
+  ]
+}
+
+variable keyvault_rw_key_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+    "Create",
+    "Delete",
+    "Update",
+    "Import",
+    "Backup",
+    "Restore",
+  ]
+}
+
+variable keyvault_rw_cert_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+    "Delete",
+    "Backup",
+    "Restore",
+  ]
+}
+
+variable keyvault_ro_secret_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+  ]
+}
+
+variable keyvault_ro_key_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+  ]
+}
+
+variable keyvault_ro_cert_permissions {
+  type = list
+  default = [
+    "Get",
+    "List",
+  ]
+}
+
+
+

@@ -1,65 +1,25 @@
 locals { 
 
-    containers = flatten(
-        [for rg, rv in var.az_resource_block : 
-         [
-          for ck, cv in rv.az_storage_accounts.datahub.containers : 
-         "${ck}|${rg}"
-         ]
-        ]
- )
+#storage_group = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.containers.raw : [for lk, lv in rv.containers.landing : [for val in cv : "${rg}|${ck}"]]]] ))
 
- #landing = distinct(flatten([for rg, rv in var.az_resource_block : [for ck, cv in rv.az_storage_accounts.datahub.containers.landing : [for lk, lv in rv.az_storage_accounts.datahub.containers.landing : "${ck}|${rg}"  ]]] ))
+storage_acct_roles = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.iam : "${ck}"]] ))
 
+containers_roles = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.containers : [for ak, av in cv : "${ak}"]]] ))
 
-#  sample(rm_grants) = distinct(flatten(
-#     [
-#       [for name, val in var.az_resource_block :
-#         [for r in val.keyvault.allowed_ip_ranges :
-#           "${name}_IP_LIMIT_${var.env}|${r}"
-#         ]
-#       ],
-#       [for name, val in var.az_resource_block :
-#         [for r in val.keyvault.rw :
-#           "${name}_GRP_LIMIT_${var.env}|${r}"
-#         ]
-#       ]
-#     ]
-#   ))
+containers_list = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.containers : {name = "${ck}" }]]))
 
-  
- keyvault_allowed_ip = flatten(
-    [
-      [for name, val in var.az_resource_block :
-        [for r in val.keyvault.allowed_ip_ranges :
-          "${name}_IP_LIMIT_${var.env}|${r}"
-        ]
-      ]
-    ]
-  )
- }
+containers_names = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.containers : "${ck}"]] ))
 
+allowed_ip_ranges_storage_accts = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in rv.allowed_ip_ranges : "${cv}" ]]))
 
-# subnet details from client team, should be with the same resource group
-data azurerm_subnet "appsnet" {
-for_each = var.az_resource_block
-   name= each.value.az_subnet.name
-   virtual_network_name = each.value.virtualnetwork.name
-   resource_group_name=var.az_resource_group_name
-   }
+storage_accts_list = distinct(flatten([for rg, rv in var.az_resource_block.DATAHUB.az_storage_accounts : "${rg}" ]))
 
-# vnet details from client team, should be with the same resource group
-data azurerm_virtual_network "vnet" {
-for_each = var.az_resource_block
-   name = each.value.virtualnetwork.name
-   resource_group_name=var.az_resource_group_name
-   }
+storage_accts_containers_group = setproduct(local.storage_accts_list, local.containers_list)
 
+storage_accts_containers_allowed_ip = setproduct(local.storage_accts_list, local.allowed_ip_ranges_storage_accts)
 
-# nsg details from client team, should be with the same resource group
-data azurerm_network_security_group "appnsg" {
-for_each = var.az_resource_block
-   name= each.value.net_sec_grp.name
-   resource_group_name=var.az_resource_group_name
-   }
+rbac_storage_accts = setproduct(local.storage_accts_list, local.storage_acct_roles)
 
+rbac_storage_containers = setproduct(local.containers_names, local.containers_roles)
+
+}

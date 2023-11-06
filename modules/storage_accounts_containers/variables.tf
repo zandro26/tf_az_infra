@@ -27,73 +27,12 @@ variable az_resource_group_name {
   type    = string
 }
 
-variable datahub {
-  type    = map
-  default = {}
+
+variable az_subnet_id {
+    type = string
 }
-
-variable keyvault {
-  type    = map
-  default = {}
-}
-
-
-variable azurerm_storage_account {
-  #type    = map
-    type = map(object({
-    name = string
-    # Other attributes
-  }))
-  default = {}
-}
-
 
 variable az_storage_accounts {
-  type    = map
-  default = {}
-}
-
-variable containers {
-  type    = map
-  default = {}
-}
-
-variable container_access_type {
-  type    = map
-  default = {}
-}
-
-variable azurerm_virtual_network {
-  type    = map
-  default = {}
-}
-
-variable azurerm_subnet {
-  type    = map
-  default = {}
-}
-
-variable azurerm_network_security_group {
-  type    = map
-  default = {}
-}
-
-variable azurerm_private_endpoint {
-  type    = map
-  default = {}
-}
-
-variable azurerm_storage_container {
-  type    = map
-  default = {}
-}
-
-variable az_subnet {
-  type    = map
-  default = {}
-}
-
-variable net_sec_grp {
   type    = map
   default = {}
 }
@@ -110,14 +49,22 @@ variable az_locale {
   type    = string
 }
 
-variable "user_group_map" {
-  type    = map(string)
-  default = {
-    "group1" = "sec-grp1",
-    "group2" = "sec-grp2",
-  }
-}
-
 variable "conns" {
   type    = map
 }
+
+
+# variable "containers_list" {
+#   type = list
+#   default = [{ name = "landing", access_type = "blob" }, {name = "raw", access_type = "blob" }]
+#  }
+ 
+#  variable "Storage_list" {
+#   type = list
+#   default = ["sec-grp1", "sec-grp2"]
+#  }
+
+#  variable "rbac_role" {
+#   type = list
+#   default = ["Storage Blob Data Contributor", "Storage Blob Data Reader"]
+#  }
