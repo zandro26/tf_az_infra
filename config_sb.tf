@@ -1,11 +1,17 @@
 locals {
   SB = {
 
-    # az_rg_naming_convention = "sx-rg-[env]-[domain]"
+    # put everyting in the input variables for the modules
+    # az_rg_naming_convention = "sx-rg-[env]-[teams]"
     # az_sa_naming_convention = "xsffgsa-[env]-[domain]"
     # az_kv_naming_convention = "kv[env][domain]"
     # az_pe_naming_convention = "pe[env][domain]"
- 
+    #private_endpoint
+    #private_dns_zone
+ common_tags = {
+ tag1 = val
+ tag2 = val
+ }
 
     teams = {
       DATAHUB = {
@@ -14,6 +20,8 @@ locals {
           ro                = ["sec-grp1", "sec-grp2"]
           allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
           allowed_vnets     = [lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}"), "vnet2"]
+        tag = val
+
         }
 
         keyvault1 = {
@@ -21,6 +29,7 @@ locals {
           ro                = ["sec-grp1", "sec-grp2"]
           allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
           allowed_vnets     = [lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}"), "vnet2"]
+          #allowed_vnets     = ["sx-cap-vnet1", "sx-cap-vnet2"]
         }
         az_storage_accounts = { ##Ensure to use Gen2 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem
           # soft_delete_retention_days = 14 -- make it as default value for the module
@@ -45,7 +54,11 @@ locals {
             #allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
             allowed_ip_ranges = ["20.39.110.0/24", "20.37.110.0/24"]
             allowed_vnets     = [lower("${var.platform}-${var.application}-${var.context}-vnet-${var.zone_loc}-${var.env}")]
-          }
+            #allowed_vnets     = ["sx-cap-vnet1", "sx-cap-vnet2"]
+                   tag = {
+              tag1= val
+            }
+             }
         
 
         # datahub2 = {
