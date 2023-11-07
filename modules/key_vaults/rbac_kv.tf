@@ -23,8 +23,9 @@ resource "azurerm_key_vault_access_policy" "rw" {
   for_each     = var.az_resource_block
   key_vault_id = azurerm_key_vault.keyvault[each.key].id
   tenant_id    = var.conns.az_tenant_id
-  #object_id    = data.azuread_group.ad_group1.id
-  object_id    = data.azuread_group.ad_group1.display_name.id
+  object_id    = data.azuread_group.ad_group1_rw.id
+  #object_id    = "${data.azuread_groups.ad_groups[each.value]}".id
+  #object_id   = lookup(data.azuread_group.ad_group1, each.key, null).id
   #secret_permissions      = ["Get", "List", "Set", "Delete", "Backup", "Restore"]
   secret_permissions      = var.keyvault_rw_secret_permissions
   #key_permissions         = ["Get", "List", "Create", "Delete", "Update", "Import", "Backup", "Restore"]
@@ -64,7 +65,9 @@ resource "azurerm_role_assignment" "example_user" {
 
 resource "azurerm_role_assignment" "example_group" {
   for_each     = var.az_resource_block
-  principal_id   = data.azuread_group.ad_group1.display_name.id
+  #principal_id   = data.azuread_group.ad_group1.display_name.id
+  #principal_id   = lookup(data.azuread_group.ad_group1, each.key,null).id
+  principal_id   = data.azuread_group.ad_group1_rw.id
   role_definition_name = "Contributor"
   scope         = azurerm_key_vault.keyvault[each.key].id
 
@@ -76,7 +79,7 @@ resource "azurerm_role_assignment" "example_group" {
 
 resource "azurerm_role_assignment" "example_service_principal" {
   for_each     = var.az_resource_block
-  principal_id   = data.azuread_group.ad_group2.id
+  principal_id   = data.azuread_group.ad_group2_rw.id
   role_definition_name = "Key Vault Contributor"
   scope         = azurerm_key_vault.keyvault[each.key].id
 
