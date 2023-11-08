@@ -1,11 +1,11 @@
 
 
 # creating keyvault
-resource azurerm_key_vault keyvault {
-    for_each = var.az_resource_block
-    name                       = lower("${var.platform}${each.key}keyvault${var.zone_loc}${var.env}")
+  resource azurerm_key_vault keyvault {
+    for_each                   = toset(local.keyvaults_list)
+    name                       = lower("kv${each.key}${var.env}${local.app_team_name[0]}")
     location                   = var.az_locale
-    resource_group_name        = var.az_resource_group_name
+    resource_group_name        = data.azurerm_resource_group.resourcegroup.name
     tenant_id                  = var.conns.az_tenant_id
     soft_delete_retention_days = 7
     purge_protection_enabled   = false
@@ -16,13 +16,10 @@ resource azurerm_key_vault keyvault {
   network_acls {
     bypass           = "AzureServices"
     default_action   = "Allow"
-    ip_rules         = each.value.keyvault.allowed_ip_ranges
-    #virtual_network_subnet_ids = [data.azurerm_subnet.appsnet[each.key].id]
-    virtual_network_subnet_ids = [var.az_subnet_id]
-  }
-depends_on = [ 
-  azurerm_key_vault.keyvault
-   ]
+    ip_rules         = local.allowed_ip_ranges_kv
+    virtual_network_subnet_ids = [data.azurerm_subnet.appsnet.id]  
+   }
+
    tags = {
  environment = lower("${var.env}")
   }

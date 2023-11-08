@@ -30,19 +30,3 @@ variable "az_client_secret" {
 variable "az_zone_locale" {
   type    = string
 }
-
-
-# variable "containers_list" {
-#   type = list
-#   default = [{ name = "landing", access_type = "blob" }, {name = "raw", access_type = "blob" }]
-#  }
-
-#  variable "Storage_list" {
-#   type = list
-#   default = ["datahub1", "datahub2"]
-#  }
-
-#  variable "rbac_roles" {
-#    type = list
-#   default = ["Storage Blob Data Contributor", "Storage Blob Data Reader"]
-#  }

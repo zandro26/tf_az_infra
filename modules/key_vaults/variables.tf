@@ -23,21 +23,6 @@ variable az_resource_block {
   default = {}
 }
 
-variable az_resource_group_name {
-  type    = string
-}
-
-variable az_subnet_id {
-    type = string
-}
-
-variable privatednszone_id {
-  type    = string
-}
-
-variable az_client_config_object_id {
-  type    = string
-}
 
 variable az_locale {
   type    = string
@@ -46,6 +31,16 @@ variable az_locale {
 variable "conns" {
   type    = map
 }
+
+variable "block_name" {
+  type  =  map
+   default = {}
+}
+
+variable "az_rg_naming_convention" {
+  type = string
+  default = "sx-rg"
+} 
 
 variable "keyvault_rbac" {
   type = list
