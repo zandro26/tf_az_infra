@@ -1,9 +1,10 @@
 
 
-# creating keyvault
+# creating unique keyvaults for each resource block occurence from the config
   resource azurerm_key_vault keyvault {
-    for_each                   = toset(local.keyvaults_list)
-    name                       = lower("kv${each.key}${var.env}${local.app_team_name[0]}")
+    #for_each                   = toset(local.keyvaults_list)
+    for_each                   = local.keyvault_resource_and_tags
+    name                       = lower("kv${trim(each.key, "vault")}${var.env}${local.app_team_name[0]}")
     location                   = var.az_locale
     resource_group_name        = data.azurerm_resource_group.resourcegroup.name
     tenant_id                  = var.conns.az_tenant_id
@@ -20,7 +21,5 @@
     virtual_network_subnet_ids = [data.azurerm_subnet.appsnet.id]  
    }
 
-   tags = {
- environment = lower("${var.env}")
-  }
+  tags = merge (local.root_tags, each.value)
   }

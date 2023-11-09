@@ -6,8 +6,14 @@ keyvaults_list = distinct(flatten([for kn, kv in var.az_resource_block.DATAHUB.k
 
 # keyvault_ro = flatten([[for name, val in var.az_resource_block : [for r in val.keyvault.ro :  "ro|${r}" ]]])
 allowed_ip_ranges_kv  = distinct(flatten([for kn, kv in var.az_resource_block.DATAHUB.keyvaults : [for ipn, ipv in kv.allowed_ip_ranges : "${ipv}" ]]))
+
 app_team_name =  distinct(flatten([for sg, sv in var.block_name: "${sg}" ]))
- }
+
+keyvault_resource_and_tags = {for sn, sv in var.az_resource_block.DATAHUB.keyvaults : sn => sv.resource_tag}
+
+root_tags = "${var.az_resource_block.DATAHUB.common_tags}"
+
+}
 
 # data "azuread_group" "ad_group1_rw" {
 #   display_name = "${local.keyvault_rw[0]}"
@@ -25,7 +31,7 @@ data "azurerm_resource_group" "resourcegroup" {
 
 # DNS zone information from client team, should be with the same resource group
 data "azurerm_private_dns_zone" "privatednszone" {
-  name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
+  name                = lower("${var.platform}${var.zone_loc}${var.env}${local.app_team_name[0]}.com")
   resource_group_name = data.azurerm_resource_group.resourcegroup.name
 }
 

@@ -20,6 +20,11 @@ storage_account_rbac_definition = {for val in flatten([for sn, sv in var.az_reso
 
 storage_containers_list         = {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in sv.containers : {storage_container = "${sn}|${ck}"}]]) : val.storage_container => val}
 
+#resource_tag_list =   {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for rtagk, rtagv in sv.resource_tag : { storageacct = "${sn}", "${rtagk}" = rtagv}]]) : val.storageacct => val}
+
+storage_account_and_resource_tags =  {for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : sn => sv.resource_tag}
+
+root_tags = "${var.az_resource_block.DATAHUB.common_tags}"
 }
 
 
@@ -59,7 +64,8 @@ data azurerm_subnet "appsnet" {
 
 # DNS zone information from client team, should be with the same resource group
 data "azurerm_private_dns_zone" "privatednszone" {
-  name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
+  #name                = lower("${var.platform}${var.context}${var.zone_loc}${var.env}.com")
+  name                = lower("${var.platform}${var.zone_loc}${var.env}${local.app_team_name[0]}.com")
   resource_group_name = data.azurerm_resource_group.resourcegroup.name
 }
 
