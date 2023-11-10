@@ -24,6 +24,7 @@ variable az_resource_block {
 }
 
 
+
 variable az_locale {
   type    = string
 }

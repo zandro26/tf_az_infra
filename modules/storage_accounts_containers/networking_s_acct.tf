@@ -23,11 +23,25 @@ for_each = toset(local.storage_accts_list)
   }
 }
 
+# resource "azurerm_storage_account_network_rules" "storageaccount_network_rules" {
+# for_each = toset(local.storage_accts_list)
+#   storage_account_id         = azurerm_storage_account.storage_account[each.key].id
+#   default_action             = "Allow"
+#   ip_rules                   = "${local.allowed_ip_ranges_storage_accts}"
+#   virtual_network_subnet_ids = [data.azurerm_subnet.appsnet.id]
+#   bypass                     = ["AzureServices"]
+
+#     depends_on = [
+#        azurerm_storage_account.storage_account,
+#       azurerm_storage_container.storage_container
+#     ]
+# }
+
 resource "azurerm_storage_account_network_rules" "storageaccount_network_rules" {
-for_each = toset(local.storage_accts_list)
+for_each = local.storage_account_and_allowed_ips
   storage_account_id         = azurerm_storage_account.storage_account[each.key].id
   default_action             = "Allow"
-  ip_rules                   = "${local.allowed_ip_ranges_storage_accts}"
+  ip_rules                   = each.value
   virtual_network_subnet_ids = [data.azurerm_subnet.appsnet.id]
   bypass                     = ["AzureServices"]
 
@@ -36,4 +50,3 @@ for_each = toset(local.storage_accts_list)
       azurerm_storage_container.storage_container
     ]
 }
-

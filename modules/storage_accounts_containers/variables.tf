@@ -28,6 +28,7 @@ variable az_storage_accounts {
   default = {}
 }
 
+
 variable az_locale {
   type    = string
 }

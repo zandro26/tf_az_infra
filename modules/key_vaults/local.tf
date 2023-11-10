@@ -1,28 +1,22 @@
 locals { 
 
-keyvaults_list = distinct(flatten([for kn, kv in var.az_resource_block.DATAHUB.keyvaults : "${kn}" ]))
-
-# keyvault_rw = flatten([[for name, val in var.az_resource_block : [for r in val.keyvault.rw : "${r}" ]]])
-
-# keyvault_ro = flatten([[for name, val in var.az_resource_block : [for r in val.keyvault.ro :  "ro|${r}" ]]])
-allowed_ip_ranges_kv  = distinct(flatten([for kn, kv in var.az_resource_block.DATAHUB.keyvaults : [for ipn, ipv in kv.allowed_ip_ranges : "${ipv}" ]]))
-
 app_team_name =  distinct(flatten([for sg, sv in var.block_name: "${sg}" ]))
-
-keyvault_resource_and_tags = {for sn, sv in var.az_resource_block.DATAHUB.keyvaults : sn => sv.resource_tag}
 
 root_tags = "${var.az_resource_block.DATAHUB.common_tags}"
 
+keyvault_rw = flatten([[for name, val in var.az_resource_block : [for r in val.keyvault.rw : "${r}" ]]])
+
 }
 
-# data "azuread_group" "ad_group1_rw" {
-#   display_name = "${local.keyvault_rw[0]}"
-# }
+
+data "azuread_group" "ad_group1_rw" {
+  display_name = "${local.keyvault_rw[0]}"
+}
 
 
-# data "azuread_group" "ad_group2_rw" {
-#   display_name = "${local.keyvault_rw[1]}"
-# }
+data "azuread_group" "ad_group2_rw" {
+  display_name = "${local.keyvault_rw[1]}"
+}
 
 
 data "azurerm_resource_group" "resourcegroup" {

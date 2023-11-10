@@ -14,17 +14,17 @@ rbac_storage_containers = setproduct(local.container_names, local.container_role
 
 iam_group = distinct(flatten([[for name, val in var.az_resource_block.DATAHUB.az_storage_accounts: [for r in val.iam : "${r}" ]]]))
 
-app_team_name =  distinct(flatten([for sg, sv in var.block_name: "${sg}" ]))
+app_team_name = distinct(flatten([for sg, sv in var.block_name: "${sg}" ]))
 
 storage_account_rbac_definition = {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for iamk, iamv in sv.iam : {storage_account = "${sn}|${iamk}", iam = iamk, config = iamv}]]) : val.storage_account => val}
 
-storage_containers_list         = {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in sv.containers : {storage_container = "${sn}|${ck}"}]]) : val.storage_container => val}
+storage_containers_list = {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for ck, cv in sv.containers : {storage_container = "${sn}|${ck}"}]]) : val.storage_container => val}
 
-#resource_tag_list =   {for val in flatten([for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : [for rtagk, rtagv in sv.resource_tag : { storageacct = "${sn}", "${rtagk}" = rtagv}]]) : val.storageacct => val}
+storage_account_and_resource_tags = {for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : sn => sv.resource_tag}
 
-storage_account_and_resource_tags =  {for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : sn => sv.resource_tag}
-
+storage_account_and_allowed_ips = {for sn, sv in var.az_resource_block.DATAHUB.az_storage_accounts : sn => sv.allowed_ip_ranges}
 root_tags = "${var.az_resource_block.DATAHUB.common_tags}"
+
 }
 
 

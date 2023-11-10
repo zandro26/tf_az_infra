@@ -2,8 +2,7 @@ locals {
   SB = {
     teams = {
       DATAHUB = {
-        keyvaults = {
-         vault1 ={ 
+        keyvault = {
           rw                = ["sec-grp1", "sec-grp2"]
           ro                = ["sec-grp1", "sec-grp2"]
           allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
@@ -12,15 +11,7 @@ locals {
               owner = "Snowlake Data Owner"  
               viewer = "Snowflake Data Viewers"       }
          }
-
-         vault2 ={ 
-          rw                = ["sec-grp1", "sec-grp2"]
-          allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
-          allowed_vnets     = ["sx-cap-vnet1", "sx-cap-vnet2"]
-          resource_tag      = {
-              owner = "Snowflake Data Engineers"         }
-          }
-        }
+ 
 
         az_storage_accounts = { ##Ensure to use Gen2 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem
           # soft_delete_retention_days = 14 -- make it as default value for the module
