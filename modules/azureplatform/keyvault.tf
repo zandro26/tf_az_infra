@@ -9,8 +9,6 @@ resource azurerm_key_vault keyvault {
     purge_protection_enabled   = true
     sku_name                   = "standard"
 
-    //do we need these?
-
     enable_rbac_authorization = true
 
     network_acls {
@@ -19,6 +17,8 @@ resource azurerm_key_vault keyvault {
     ip_rules         = var.akv_ip_rules
     virtual_network_subnet_ids = [var.appsnet]
     }
+    
+    tags  = merge(var.common_tags, var.keyvault_parameters.resource_tag)
 
 }
 

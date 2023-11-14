@@ -3,7 +3,7 @@ env_dev = {
         keyvault_deploy = true
         keyvault_parameters = {
           rbac = {
-            "Key Vault Administrator" = ["sec-grp1"]
+            "Key Vault Administrator" = ["sec-grp1", "sec-grp2"]
             "Key Vault Secrets User"  = ["sec-grp2"]
           }
         }
@@ -32,7 +32,7 @@ env_dev = {
               containers = {
                 context1 = {
                   rbac = {
-                    
+
                   }
                 }
               }

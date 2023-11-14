@@ -1,7 +1,6 @@
-//built in roles
 
 locals {
-    kv_builtin = var.keyvault_deploy && can(var.keyvault_parameters.rbac) ? flatten([
+    kv_roles = var.keyvault_deploy && can(var.keyvault_parameters.rbac) ? flatten([
         for role, members in var.keyvault_parameters.rbac : [
             for member in members : {
                 role = role
@@ -14,7 +13,8 @@ locals {
 
 data "azuread_group" "kv_ad_member" {
     for_each = {
-      for entry in local.kv_builtin : entry.member => entry
+      for k, v in local.kv_roles : k => v
+      if var.keyvault_deploy && local.kv_roles != []
     }
 
     display_name = each.value.member
@@ -22,7 +22,8 @@ data "azuread_group" "kv_ad_member" {
 
 resource "azurerm_role_assignment" "kv_rbac" {
     for_each = var.keyvault_deploy ? {
-        for entry in local.kv_builtin : entry.member => entry
+        for k, v in local.kv_roles : k => v
+        if var.keyvault_deploy && local.kv_roles != []
     } : {}
 
     scope = azurerm_key_vault.keyvault[0].id

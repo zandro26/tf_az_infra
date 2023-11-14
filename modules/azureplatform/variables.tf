@@ -44,3 +44,7 @@ variable "privatednszone" {
 variable "keyvault_parameters" {
   description = "keyvault parameters"
 }
+
+variable "common_tags" {
+  description = "common tags"
+}

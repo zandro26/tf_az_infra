@@ -1,23 +1,20 @@
 locals {
   SB = {
+    common_tags = {
+          environment = "${var.env}"
+          department  = "${var.context}"
+          application = "${var.application}"
+          source      = "terraform"
+
+      }
     teams = {
       DATAHUB = {
-        # keyvault = {
-        #   rw                = ["sec-grp1", "sec-grp2"]
-        #   ro                = ["sec-grp1", "sec-grp2"]
-        #   allowed_ip_ranges = ["0.0.0.0", "20.37.110.0/24"]
-        #   allowed_vnets     = ["sx-cap-vnet1", "sx-cap-vnet2"]
-        #   resource_tag = {
-        #     owner = "Snowlake Data Owner"
-        #   viewer = "Snowflake Data Viewers" }
-        # }
-
-        // proposal
         keyvault_deploy = true
         keyvault_parameters = {
+          resource_tag = {owner = "snowflake user"}
           rbac = {
-            "Keyvault Administrator" = ["secgrp1"]
-            "Keyvault Secrets User"  = ["secgrp2"]
+            "Keyvault Administrator" = ["sec-grp1", "sec-grp2"]
+            "Keyvault Secrets User"  = ["sec-grp2"]
           }
         }
 
@@ -69,14 +66,6 @@ locals {
               owner = "Data Users"
             viewer = "Data Viewers" }
           }
-        }
-
-        common_tags = {
-          environment = "${var.env}"
-          department  = "${var.context}"
-          application = "${var.application}"
-          source      = "terraform"
-
         }
       }
     }

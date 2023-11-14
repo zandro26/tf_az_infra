@@ -1,7 +1,7 @@
-# locals {
-#   #build=var.env=="SB"?local.SB:var.env=="DEV"?local.DEV:local.PROD
-#   build = local.SB
-# }
+locals {
+  #build=var.env=="SB"?local.SB:var.env=="DEV"?local.DEV:local.PROD
+  build = local.SB
+}
 
 # module "storage_accounts_containers" {
 #   //for each
@@ -30,16 +30,16 @@
 #   az_locale         = var.az_zone_locale
 # }
 
-locals {
-  environments = {
-    sb  = var.env_dev
-    # test = var.env_test
-  }
-}
+# locals {
+#   environments = {
+#     sb  = var.env_dev
+#     # test = var.env_test
+#   }
+# }
 //loop here not inside the module
-module "keyvault" {
-  source   = "./modules/key_vaults_test"
-  for_each = local.environments[var.env]
+module "azureplatform" {
+  source   = "./modules/azureplatform"
+  for_each = local.build.teams
 
   az_locale           = var.az_zone_locale
   env                 = var.env
@@ -50,4 +50,5 @@ module "keyvault" {
   conns               = var.conns
   privatednszone      = data.azurerm_private_dns_zone.privatednszone.id
   keyvault_parameters = try(each.value.keyvault_parameters, null)
+  common_tags         = local.build.common_tags
 }
