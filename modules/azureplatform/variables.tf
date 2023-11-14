@@ -48,3 +48,7 @@ variable "keyvault_parameters" {
 variable "common_tags" {
   description = "common tags"
 }
+
+variable "az_storage_accounts" {
+  description = "storage accounts"
+}

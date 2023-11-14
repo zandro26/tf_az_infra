@@ -13,8 +13,8 @@ locals {
         keyvault_parameters = {
           resource_tag = {owner = "snowflake user"}
           rbac = {
-            "Keyvault Administrator" = ["sec-grp1", "sec-grp2"]
-            "Keyvault Secrets User"  = ["sec-grp2"]
+            "Key Vault Administrator" = ["sec-grp1", "sec-grp2"]
+            "Key Vault Secrets User"  = ["sec-grp2"]
           }
         }
 
@@ -28,13 +28,18 @@ locals {
             }
             containers = {
               landing = {
-                "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
-                #"Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
-                "Storage Blob Data Owner" = ["sec-grp1", "sec-grp2"]
+                iam = {
+                  "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
+                  #"Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
+                  "Storage Blob Data Owner" = ["sec-grp1", "sec-grp2"]
+                }
               }
               raw = {
-                "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
-                "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
+                iam = {
+                  "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
+                  "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
+                }
+                
               }
             }
             allowed_ip_ranges = ["20.39.110.0/24", "20.37.110.0/24"]
@@ -51,11 +56,15 @@ locals {
             }
             containers = {
               processed = {
-                "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
+                iam = {
+                  "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
+                }
               }
               trimmed = {
-                "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
-                "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
+                iam = {
+                  "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
+                  "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
+                }
               }
             }
             allowed_ip_ranges = ["20.37.110.0/24"]

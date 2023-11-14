@@ -50,5 +50,6 @@ module "azureplatform" {
   conns               = var.conns
   privatednszone      = data.azurerm_private_dns_zone.privatednszone.id
   keyvault_parameters = try(each.value.keyvault_parameters, null)
+  az_storage_accounts = try(each.value.az_storage_accounts, null)
   common_tags         = local.build.common_tags
 }
