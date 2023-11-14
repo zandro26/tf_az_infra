@@ -5,6 +5,8 @@ locals {
             allowed_ip_ranges = storage_account.allowed_ip_ranges
             iam = storage_account.iam
             storage_account_key = storage_account_key
+            containers = storage_account.containers
+            
         }
     }
 }
@@ -34,6 +36,7 @@ locals {
             for container_key, container in storage_containers.containers : {
                 storage_account_key = storage_account_key
                 container_key = container_key
+                iam           = container.iam
             }
         ]
     ])
