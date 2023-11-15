@@ -34,7 +34,7 @@ variable "az_zone_locale" {
 
 //data lookups
 data "azurerm_resource_group" "resourcegroup" {
-  name = lower("sx-rgp-${var.env}-teams")
+  name = lower("sx-rgrp-${var.env}-teams")
 }
 
 # DNS zone information from client team, should be with the same resource group

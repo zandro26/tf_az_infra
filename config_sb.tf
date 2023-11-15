@@ -1,17 +1,17 @@
 locals {
   SB = {
     common_tags = {
-          environment = "${var.env}"
-          department  = "${var.context}"
-          application = "${var.application}"
-          source      = "terraform"
+      environment = "${var.env}"
+      department  = "${var.context}"
+      application = "${var.application}"
+      source      = "terraform"
 
-      }
+    }
     teams = {
       DATAHUB = {
         keyvault_deploy = true
         keyvault_parameters = {
-          resource_tag = {owner = "snowflake user"}
+          resource_tag = { owner = "snowflake user" }
           rbac = {
             "Key Vault Administrator" = ["sec-grp1", "sec-grp2"]
             "Key Vault Secrets User"  = ["sec-grp2"]
@@ -39,7 +39,7 @@ locals {
                   "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
                   "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
                 }
-                
+
               }
             }
             allowed_ip_ranges = ["20.39.110.0/24", "20.37.110.0/24"]

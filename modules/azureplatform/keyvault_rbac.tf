@@ -1,16 +1,5 @@
 
-locals {
-    kv_roles = var.keyvault_deploy && can(var.keyvault_parameters.rbac) ? flatten([
-        for role, members in var.keyvault_parameters.rbac : [
-            for member in members : {
-                role = role
-                member = member
-            }
-        ]
-    ]) : []
-}
-
-
+#Get AD member for KV
 data "azuread_group" "kv_ad_member" {
     for_each = {
       for k, v in local.kv_roles : k => v
