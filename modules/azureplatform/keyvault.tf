@@ -1,7 +1,7 @@
 resource azurerm_key_vault keyvault {
     count = var.keyvault_deploy ? 1 : 0
    
-    name                       = lower("kv${var.name}${var.env}teams") //naming convention can be decided at the config level or here
+    name                       = lower("kva${var.name}${var.env}teams") //naming convention can be decided at the config level or here
     location                   = var.az_locale
     resource_group_name        = var.resourcegroup
     tenant_id                  = var.conns.az_tenant_id
