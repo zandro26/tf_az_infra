@@ -27,7 +27,7 @@ locals {
 
                    az_storage_accounts = { ##Ensure to use Gen2 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem
                                            # soft_delete_retention_days = 14 -- make it as default value for the module
-                       datahub1 = {
+                       datahub01 = {
                            iam = {
                                "Storage Blob Data Contributor" = ["sec-grp1", "sec-grp2"]
                                "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
@@ -55,7 +55,7 @@ locals {
                                    owner = "Data Admin" }
                        }
 
-                       datahub2 = {
+                       datahub02 = {
                            iam = {
                                "Storage Blob Data Reader"      = ["sec-grp1", "sec-grp2"]
                             }
